@@ -1,0 +1,33 @@
+import React from 'react'
+import { useState,useEffect } from 'react'
+import axios from 'axios'
+function Users() {
+    const[allusers,setAllUsers]=useState([])
+    useEffect(()=>{
+         async function show() {
+            await axios.get("http://localhost:8009/api/users").then((res)=>{
+setAllUsers(res.data)
+console.log(res.data)
+            }).catch((err)=>{
+                console.log(err.response.data)
+            })
+            
+         }
+         show()
+    },[])
+  return (
+    <div>
+      <h1>All user Details</h1>
+      <table border='2'>
+      {allusers.map((item,index)=>
+    <tr>
+    <td>{item.name}</td> <td>{item.email}</td> <td>{item.address}</td><br></br>
+    </tr>
+    
+)}
+</table>
+    </div>
+  )
+}
+
+export default Users
