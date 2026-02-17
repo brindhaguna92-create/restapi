@@ -3,7 +3,7 @@ import { useState,useEffect } from 'react'
 import axios from 'axios'
 function Users() {
     const[allusers,setAllUsers]=useState([])
-    useEffect(()=>{
+ useEffect(()=>{
          async function show() {
             await axios.get("http://localhost:8009/api/users").then((res)=>{
 setAllUsers(res.data)
@@ -15,17 +15,26 @@ console.log(res.data)
          }
          show()
     },[])
-  return (
+    const delfun =async(delid)=>{
+      await axios.delete(`http://localhost:8009/api/delete/user/${delid}`).then((res)=>{
+        console.log("successfully deleted:",res.data)
+        window.location.reload()                                                          
+      }).catch((err)=>{
+        console.log("error:",err.response.data)
+      })
+    }
+     return (
     <div>
       <h1>All user Details</h1>
       <table border='2'>
+        <tr bgcolor="pink"><th>Customer name</th><th>email</th><th>address</th><th>Delete operation</th></tr>
       {allusers.map((item,index)=>
     <tr>
-    <td>{item.name}</td> <td>{item.email}</td> <td>{item.address}</td><br></br>
-    </tr>
-    
-)}
+    <td>{item.name}</td> <td>{item.email}</td> <td>{item.address}</td>
+    <td><button onClick={()=>delfun(item._id)}>❌Del</button></td></tr>
+      )}
 </table>
+    
     </div>
   )
 }
